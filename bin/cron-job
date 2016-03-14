@@ -13,20 +13,17 @@ make_backup () {
     MYSQL_PORT={{MYSQL_PORT}}
     MYSQL_USER={{MYSQL_USER}}
     MYSQL_PASSWORD={{MYSQL_PASSWORD}}
-    DB_NAME={{DB_NAME}}
-    SLACK_TOKEN={{SLACK_TOKEN}}
-    SLACK_CHANNEL={{SLACK_CHANNEL}}
     FILE={{FILENAME}}-$DATETIME.sql.gz
 
-    mysqldump -h $MYSQL_HOST -P $MYSQL_PORT -u $MYSQL_USER -p$MYSQL_PASSWORD $DB_NAME | gzip -9 -c  | aws s3 cp - --region=$REGION  s3://$BUCKET/$FILE
+    mysqldump -h $MYSQL_HOST -P $MYSQL_PORT -u $MYSQL_USER -p$MYSQL_PASSWORD --all-databases | gzip -9 -c | aws s3 cp - --region=$REGION s3://$BUCKET/$FILE
+
+    aws s3 cp --region=$REGION s3://$BUCKET/$FILE s3://$BUCKET/last.sql.gz
 
     # exit if last command have problems
     if  [ "$?" == "0" ]; then
         echo "Backup process complete";
-        slackcli -t $SLACK_TOKEN -h $SLACK_CHANNEL -m "Backup completed for $FILENAME"
     else
         echo "Error occurred in backup process. Exiting now"
-        slackcli -t $SLACK_TOKEN -h $SLACK_CHANNEL -m "Error occurred in backup process $FILENAME."
         kill -9 $PID
     fi
 

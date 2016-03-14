@@ -13,9 +13,6 @@ sed 's,{{MYSQL_HOST}},'"${MYSQL_HOST}"',g' -i /backup/bin/cron-job
 sed 's,{{MYSQL_PORT}},'"${MYSQL_PORT}"',g' -i /backup/bin/cron-job
 sed 's,{{MYSQL_USER}},'"${MYSQL_USER}"',g' -i /backup/bin/cron-job
 sed 's,{{MYSQL_PASSWORD}},'"${MYSQL_PASSWORD}"',g' -i /backup/bin/cron-job
-sed 's,{{DB_NAME}},'"${DB_NAME}"',g' -i /backup/bin/cron-job
-sed 's,{{SLACK_TOKEN}},'"${SLACK_TOKEN}"',g' -i /backup/bin/cron-job
-sed 's,{{SLACK_CHANNEL}},'"${SLACK_CHANNEL}"',g' -i /backup/bin/cron-job
 
 touch /var/log/cron.log;
 
