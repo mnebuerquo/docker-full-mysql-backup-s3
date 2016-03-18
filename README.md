@@ -36,6 +36,9 @@ This action should be only done on a freshly created database with root user. Th
 - _`$MYSQL_HOST`_ - Host where mysql is running.
 - _`$FILENAME`_ - Name to file in S3 Storage. Default name `default-date +"%Y-%m-%d_%H-%M"` output example `default-2015-08-03_17-58`
 - _`$BACKUP_WINDOW`_ - What time should backup run. you should use crontab format, so see [documentation](http://www.freebsd.org/cgi/man.cgi?crontab(5). default value every day at 6 am.
+- _`$KILL_IF_ANY_FAIL`_ - If any error occurs while the backing up proccess, we will kill the docker container will be finished
+- _`$RESTORE_ON_START`_ - Restores last.sql.gz, at the moment of start the docker container
+
 
 # Example of running
 
