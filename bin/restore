@@ -5,8 +5,13 @@ if [ "$1" == "" ]; then
     echo "EX: ./restore backup-201501.sql.gz"
 fi
 
+# Makes the piped commands fail when the first one fail
+set -o pipefail
+
 aws s3 cp --region=$REGION s3://$BUCKET/$1 - | gzip -dc | mysql -h $MYSQL_HOST -P $MYSQL_PORT --user=$MYSQL_USER --password=$MYSQL_PASSWORD
 
-if [ "$?" != "0" ]; then
-  echo "Restoring process fail"
+if  [ "$?" == "0" ]; then
+    echo "`date`: Restore process complete";
+else
+    echo "`date`: Restoring process fail"
 fi
