@@ -26,8 +26,8 @@ if crontab -l ; then
 	echo "crontab already installed"
 else
 	echo "installing crontab"
-    #crontab -l | { cat; echo "${BACKUP_WINDOW} /backup/bin/cron-job >> /var/log/cron.log 2>&1"; } | crontab -
-	(crontab -l 2> /dev/null ; echo "${BACKUP_WINDOW} /backup/bin/cron-job >> /var/log/cron.log 2>&1") 2>&1 | sort | uniq | crontab -
+	#(crontab -l 2> /dev/null ; echo "${BACKUP_WINDOW} /backup/bin/cron-job >> /var/log/cron.log 2>&1") 2>&1 | sort | uniq | crontab -
+	(echo "${BACKUP_WINDOW} /backup/bin/cron-job >> /var/log/cron.log 2>&1") 2>&1 | sort | uniq | crontab -
 fi
 
 # run cron in background and show the output
