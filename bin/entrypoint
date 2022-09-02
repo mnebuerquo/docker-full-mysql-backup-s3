@@ -2,7 +2,8 @@
 
 MYSQL_PORT=${MYSQL_PORT:-3306}
 FILENAME=${FILENAME:-backup}
-BACKUP_WINDOW=${BACKUP_WINDOW:-"0 6 * * * "}
+# remove quotes - quotes are required to get through some env file contexts
+BACKUP_WINDOW=$( echo "${BACKUP_WINDOW:-"0 6 * * * "}" | tr -d '"' )
 
 sed 's,{{FILENAME}},'"${FILENAME}"',g' -i /backup/bin/cron-job
 sed 's,{{AWS_ACCESS_KEY_ID}},'"${AWS_ACCESS_KEY_ID}"',g' -i /backup/bin/cron-job
@@ -25,9 +26,10 @@ if crontab -l ; then
 	echo "crontab already installed"
 else
 	echo "installing crontab"
-    crontab -l | { cat; echo "$BACKUP_WINDOW /backup/bin/cron-job >> /var/log/cron.log 2>&1"; } | crontab -
+    #crontab -l | { cat; echo "${BACKUP_WINDOW} /backup/bin/cron-job >> /var/log/cron.log 2>&1"; } | crontab -
+	(crontab -l 2> /dev/null ; echo "${BACKUP_WINDOW} /backup/bin/cron-job >> /var/log/cron.log 2>&1") 2>&1 | sort | uniq | crontab -
 fi
 
-# run cron in background and show the output 
+# run cron in background and show the output
 crond;
 tail -f /var/log/cron.log;
