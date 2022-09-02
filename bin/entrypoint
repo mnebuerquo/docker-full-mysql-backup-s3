@@ -21,11 +21,11 @@ if [ "$RESTORE_ON_START" ]; then
 fi
 
 # prevent duplicate jobs when restart containers
-if [ ! -f /home/.cronjob ]; then
-
+if crontab -l ; then
+	echo "crontab already installed"
+else
+	echo "installing crontab"
     crontab -l | { cat; echo "$BACKUP_WINDOW /backup/bin/cron-job >> /var/log/cron.log 2>&1"; } | crontab -
-    touch /home/.cronjob
-
 fi
 
 # run cron in background and show the output 
