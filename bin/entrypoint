@@ -31,5 +31,5 @@ else
 fi
 
 # run cron in background and show the output
-crond;
+cron;
 tail -f /var/log/cron.log;
