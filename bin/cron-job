@@ -18,6 +18,7 @@ make_backup () {
     MYSQL_USER={{MYSQL_USER}}
     MYSQL_PASSWORD={{MYSQL_PASSWORD}}
     FILE={{FILENAME}}-$DATETIME.sql.gz
+	LASTFILE={{FILENAME}}-latest.sql.gz
 
     mysqldump \
 		-h $MYSQL_HOST \
@@ -39,7 +40,7 @@ make_backup () {
     fi
 
     # copies the freshly created backup to last.sql.gz
-    aws s3 cp --region=$REGION s3://$BUCKET/$FILE s3://$BUCKET/last.sql.gz
+    aws s3 cp --region=$REGION s3://$BUCKET/$FILE s3://$BUCKET/$LASTFILE
 
     if  [ "$?" == "0" ]; then
         echo "`date`: Copied to last.sql.gz";
