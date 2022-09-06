@@ -1,5 +1,21 @@
 #!/bin/bash
 
+COMMAND="${1:-backup}"
+
+if [ "restore" = "${COMMAND}" ]; then
+	# do the restore command instead of running the cron job
+	/backup/bin/restore "${2}"
+	exit
+fi
+
+if [ "backup" = "${COMMAND}" ]; then
+	# do the backup command, then exit
+	/backup/bin/backup
+	exit
+fi
+
+# not restoring, so do the normal startup
+
 MYSQL_PORT=${MYSQL_PORT:-3306}
 FILENAME=${FILENAME:-backup}
 # remove quotes - quotes are required to get through some env file contexts
