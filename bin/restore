@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LASTFILE={{FILENAME}}-latest.sql.gz
+LASTFILE="${FILENAME}-latest.sql.gz"
 
 if [ "$1" == "" ]; then
     echo "You did not choose any file to download;"
