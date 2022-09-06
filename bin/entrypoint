@@ -1,15 +1,16 @@
 #!/bin/bash
 
-COMMAND="${1:-backup}"
+# if no command specified, install cron and run forever
+COMMAND="${1:-install}"
 
-if [ "restore" = "${COMMAND}" ]; then
+if [ "restore" = "${COMMAND}" ] ; then
 	# do the restore command instead of running the cron job
 	echo "received restore command"
 	/backup/bin/restore "${2}"
 	exit
 fi
 
-if [ "backup" = "${COMMAND}" ]; then
+if [ "backup" = "${COMMAND}" ] ; then
 	# do the backup command, then exit
 	echo "received backup command"
 	/backup/bin/backup
