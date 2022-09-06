@@ -3,6 +3,8 @@
 DATETIME=`date +"%Y-%m-%d_%H_%M"`
 FILE=$FILENAME-$DATETIME.sql.gz
 
+echo "running backup now"
+
 mysqldump \
 	-h $MYSQL_HOST \
 	-P $MYSQL_PORT \

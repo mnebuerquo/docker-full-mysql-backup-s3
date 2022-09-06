@@ -14,6 +14,8 @@ if [ "backup" = "${COMMAND}" ]; then
 	exit
 fi
 
+echo "no special commands, setting up automated backup scheduler"
+
 # not restoring, so do the normal startup
 
 MYSQL_PORT=${MYSQL_PORT:-3306}
@@ -34,18 +36,21 @@ sed 's,{{MYSQL_PASSWORD}},'"${MYSQL_PASSWORD}"',g' -i /backup/bin/cron-job
 touch /var/log/cron.log;
 
 if [ "$RESTORE_ON_START" ]; then
-    /backup/bin/restore last.sql.gz
+	# default to latest backup if restore has no params
+	echo "restoring on startup"
+    /backup/bin/restore
 fi
 
 # prevent duplicate jobs when restart containers
-if crontab -l ; then
+if crontab -l 2>/dev/null ; then
 	echo "crontab already installed"
 else
-	echo "installing crontab"
+	echo "installing crontab in container"
 	#(crontab -l 2> /dev/null ; echo "${BACKUP_WINDOW} /backup/bin/cron-job >> /var/log/cron.log 2>&1") 2>&1 | sort | uniq | crontab -
 	(echo "${BACKUP_WINDOW} /backup/bin/cron-job >> /var/log/cron.log 2>&1") 2>&1 | sort | uniq | crontab -
 fi
 
 # run cron in background and show the output
+echo "starting cron"
 cron;
 tail -f /var/log/cron.log;

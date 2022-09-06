@@ -9,6 +9,8 @@ fi
 
 RESTOREFILE="${1:-"${LASTFILE}"}"
 
+echo "restoring ${RESTOREFILE}"
+
 # Makes the piped commands fail when the first one fail
 set -o pipefail
 
