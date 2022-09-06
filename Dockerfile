@@ -1,6 +1,6 @@
 FROM ubuntu 
 
-# debian provides actual mysql, while alpine provides mariadb
+# debian/ubuntu provides actual mysql, while alpine provides mariadb
 
 RUN apt-get update
 RUN apt-get install -y mysql-client 

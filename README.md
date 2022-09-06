@@ -1,3 +1,22 @@
+# This is a fork, for reasons:
+
+1. [Not compatible with newer mysql because alpine uses mariadb client](https://github.com/selim13/docker-automysqlbackup/issues/6)
+	In switching to a different base for the container, there were things that
+	needed to change for compatibility reasons. Mainly using apt-get instead
+	of the package installer used in alpine.
+2. Needed 'last' file to have same name prefix as scheduled files.
+3. Needed to be able to run container with restore command rather than docker
+   exec to run it. (Run container with `restore <filename>` as arguments.)
+4. Restore needed to be able to get the most recent backup as a default if
+   filename was omitted.
+5. Setting up the crontab in the container needed some work. Since this
+   container is disposable, there is no need to preserve existing
+   crontabs in the entrypoint. There will only be one, and we overwrite
+   it.
+6. BACKUP_WINDOW variable could have quotes in it for ci/cd reasons, so we
+   have to remove the quotes or it breaks crontab.
+
+
 # Docker-full-mysql-backup-s3
 
 Container to backup and restore your entire MySQL database, including all databases in your host, users, permissions... using awscli.
