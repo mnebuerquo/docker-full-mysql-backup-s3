@@ -1,11 +1,12 @@
 # This is a fork, for reasons:
 
-1. [Not compatible with newer mysql because alpine uses mariadb client](https://github.com/selim13/docker-automysqlbackup/issues/6)
-	In switching to a different base for the container, there were things that
-	needed to change for compatibility reasons. Mainly using apt-get instead
-	of the package installer used in alpine.
-2. Needed 'last' file to have same name prefix as scheduled files.
-3. Needed to be able to run container with restore command rather than docker
+1. [Not compatible with newer mysql because alpine uses mariadb client.](https://github.com/selim13/docker-automysqlbackup/issues/6)
+   In switching to a different base for the container, there were things that
+   needed to change for compatibility reasons. Mainly using apt-get instead
+   of the package installer used in alpine.
+2. Needed 'last.sql.gz' file to have same name prefix as scheduled files, so
+   different databases can be backed up into the same bucket.
+3. Needed to be able to run container with restore command rather than use docker
    exec to run it. (Run container with `restore <filename>` as arguments.)
 4. Restore needed to be able to get the most recent backup as a default if
    filename was omitted.
@@ -40,7 +41,7 @@ This will create a file in you bucket that will look like `default-2015-08-03_17
   ```bash
   ./restore example.sql.gz
   ```
-This action should be only done on a freshly created database with root user. This will re-create all the users that were previously there, recreate all the databases and all the data. 
+This action should be only done on a freshly created database with root user. This will re-create all the users that were previously there, recreate all the databases and all the data.
 
 
 # Environment variables
