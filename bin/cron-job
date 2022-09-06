@@ -39,13 +39,13 @@ make_backup () {
         fi
     fi
 
-    # copies the freshly created backup to last.sql.gz
+    # copies the freshly created backup to $LASTFILE
     aws s3 cp --region=$REGION s3://$BUCKET/$FILE s3://$BUCKET/$LASTFILE
 
     if  [ "$?" == "0" ]; then
-        echo "`date`: Copied to last.sql.gz";
+        echo "`date`: Copied to ${LASTFILE}";
     else
-        echo "`date`: Error occurred at last.sql.gz creation."
+        echo "`date`: Error occurred at ${LASTFILE} creation."
     fi
 
 }

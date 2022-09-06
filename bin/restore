@@ -1,14 +1,25 @@
 #!/bin/bash
 
+LASTFILE={{FILENAME}}-latest.sql.gz
+
 if [ "$1" == "" ]; then
     echo "You did not choose any file to download;"
     echo "EX: ./restore backup-201501.sql.gz"
 fi
 
+RESTOREFILE="${1:-"${LASTFILE}"}"
+
 # Makes the piped commands fail when the first one fail
 set -o pipefail
 
-aws s3 cp --region=$REGION s3://$BUCKET/$1 - | gzip -dc | mysql -h $MYSQL_HOST -P $MYSQL_PORT --user=$MYSQL_USER --password=$MYSQL_PASSWORD
+aws s3 cp --region="${REGION}" \
+	"s3://${BUCKET}/${RESTOREFILE}" - \
+	| gzip -dc \
+	| mysql \
+		-h "${MYSQL_HOST}" \
+		-P "${MYSQL_PORT}" \
+		--user="${MYSQL_USER}" \
+		--password="${MYSQL_PASSWORD}"
 
 if  [ "$?" == "0" ]; then
     echo "`date`: Restore process complete";
